@@ -1,27 +1,32 @@
 package com.spring.mvc.models;
 
 
+import javax.persistence.*;
 
-
+@Entity
+@Table(name="users")
 public class User {
 
+
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-
+    @Column(name = "name")
     private String name;
 
-
+    @Column(name = "surname")
     private String surname;
 
-
-    private int  age;
+    @Column(name = "age")
+    private String  age;
 
     public User( ) {
 
     }
 
-    public User(int id,String name, String surname, int age) {
-        this.id = id;
+    public User(String name, String surname, String age) {
         this.name = name;
         this.surname = surname;
         this.age = age;
@@ -52,11 +57,11 @@ public class User {
         this.surname = surname;
     }
 
-    public int getAge() {
+    public String getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(String age) {
         this.age = age;
     }
 

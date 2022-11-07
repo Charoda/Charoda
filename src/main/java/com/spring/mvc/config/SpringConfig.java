@@ -28,20 +28,17 @@ import java.util.Properties;
 @Configuration
 @ComponentScan("com.spring.mvc")
 @EnableWebMvc
-@EnableTransactionManagement
-@PropertySource(value = "classpath:db.properties")
 public class SpringConfig implements WebMvcConfigurer {
 
 
     private final ApplicationContext applicationContext;
 
-    private Environment env;
 
     @Autowired
-    public SpringConfig(ApplicationContext applicationContext, Environment env)
+    public SpringConfig(ApplicationContext applicationContext)
     {
         this.applicationContext = applicationContext;
-        this.env = env;
+
     }
 
     @Bean
@@ -73,44 +70,5 @@ public class SpringConfig implements WebMvcConfigurer {
     }
 
 
-
-    private Properties hibernateProperties() {
-        Properties properties = new Properties();
-        properties.put("hibernate.dialect", env.getRequiredProperty("hibernate.dialect"));
-        properties.put("hibernate.show_sql", env.getRequiredProperty("hibernate.show_sql"));
-        return properties;
-    }
-
-    @Bean
-    public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(env.getRequiredProperty("db.driverClassName"));
-        dataSource.setUrl(env.getRequiredProperty("db.url"));
-        dataSource.setUsername(env.getRequiredProperty("db.username"));
-        dataSource.setPassword(env.getRequiredProperty("db.password"));
-        return dataSource;
-    }
-
-
-
-    @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-        final LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(dataSource());
-        em.setPackagesToScan("com.spring.mvc.models");
-
-        final HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        em.setJpaVendorAdapter(vendorAdapter);
-        em.setJpaProperties(hibernateProperties());
-
-        return em;
-    }
-
-    @Bean
-    public PlatformTransactionManager transactionManager() {
-        JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
-        return transactionManager;
-    }
 
 }
