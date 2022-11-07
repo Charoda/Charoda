@@ -2,22 +2,18 @@ package com.spring.mvc.controllers;
 
 
 
-import com.spring.mvc.dao.DAOService;
-import com.spring.mvc.dao.UserDaoJPA;
-import com.spring.mvc.models.UserJPA;
+import com.spring.mvc.models.User;
 import com.spring.mvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-public class Controllers {
+public class UserController {
 
 
 //    @Resource(name = "secondUserService")
@@ -41,12 +37,12 @@ public class Controllers {
 
     @GetMapping("/new")
     public String addUser(Model model) {
-        model.addAttribute("user",new UserJPA());
+        model.addAttribute("user",new User());
         return "/new";
     }
 
     @PostMapping("/create")
-    public String create(@ModelAttribute("user") UserJPA user) {
+    public String create(@ModelAttribute("user") User user) {
         userService.save(user);
         return "redirect:/people/list";
     }
@@ -54,7 +50,7 @@ public class Controllers {
 
     @GetMapping("/people/list")
     public String getListUser(Model model) {
-        List<UserJPA> userList = userService.index();
+        List<User> userList = userService.index();
         model.addAttribute("userList",userList);
         return "/list";
     }
@@ -66,7 +62,7 @@ public class Controllers {
     }
 
     @PatchMapping("/update/{id}")
-    public String update(@ModelAttribute("user") UserJPA user, @PathVariable("id") int id) {
+    public String update(@ModelAttribute("user") User user, @PathVariable("id") int id) {
         userService.update(id,user);
         return "redirect:/people/list";
     }
